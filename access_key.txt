@@ -1,0 +1,12 @@
+
+
+Access Key ID:
+AKIAJ5A4VA7F3IYLYROA
+Secret Access Key:
+3kzuvS3s1D8k+BPQKlivrY8SlO9duHBgXkdO2uXk
+
+serverless config credentials --provider aws --key AKIAJ5A4VA7F3IYLYROA --secret 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
+serverless config credentials --provider aws --key AKIAJ5A4VA7F3IYLYROA --secret 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
+
+
+serverless config credentials --provider aws --key AKIAJ4QCL4IQGCNOJMAA --secret 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
