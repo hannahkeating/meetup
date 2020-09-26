@@ -9,7 +9,7 @@ module.exports.getAccessToken = async (event) => {
     "&client_secret=kghc17bpes3v06cmdrf4inihqa" +
     "&grant_type=authorization_code" +
     "&redirect_uri=https://hannahkeating.github.io/meetup/" +
-    "&code=448daed9f16993c7e5830d16ce1a9c7b" +
+    "&code=0baa627c9d50368ee3912d81d2d9bd64" +
     "&code=" +
     event.pathParameters.code;
 
