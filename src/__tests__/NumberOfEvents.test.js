@@ -1,86 +1,36 @@
-// import React, { Component } from "react";
-// import { shallow } from "enzyme";
-// import NumberOfEvents from "../NumberOfEvents";
-
-// describe("<NumberOfEvents /> component", () => {
-//   let NumberOfEventsWrapper;
-//   beforeAll(() => {
-//     NumberOfEventsWrapper = shallow(<NumberOfEvents updateEvents={() => {}} />);
-//   });
-
-//   test("render textbox element", () => {
-//     expect(NumberOfEventsWrapper.find(".numberOfEvents")).toHaveLength(1);
-//   });
-
-//   test("render text input correctly", () => {
-//     const numberOfEvents = NumberOfEventsWrapper.state("numberOfEvents");
-//     expect(
-//       NumberOfEventsWrapper.find("#numberOfEvents__input").prop("value")
-//     ).toBe(numberOfEvents);
-//   });
-
-//   test("change state when input changes", () => {
-//     const eventObject = { target: { value: 32 } };
-//     NumberOfEventsWrapper.find("#numberOfEvents__input").simulate(
-//       "change",
-//       eventObject
-//     );
-//     expect(NumberOfEventsWrapper.state("numberOfEvents")).toBe(32);
-//   });
-
-//   test("change state when input changes", () => {
-//     const eventObject = { target: { value: 24 } };
-//     NumberOfEventsWrapper.find("#numberOfEvents__input").simulate(
-//       "change",
-//       eventObject
-//     );
-//     expect(NumberOfEventsWrapper.state("numberOfEvents")).toBe(24);
-//   });
-
-//   test("show number of events input label", () => {
-//     expect(NumberOfEventsWrapper.find(".numberOfEvents label")).toHaveLength(1);
-//   });
-// });
-import React, { Component } from "react";
+import React from "react";
 import { shallow } from "enzyme";
-import NumberOfEvents from "../NumberOfEvents";
+import NumberofEvents from "../NumberofEvents";
 
-describe("<NumberOfEvents /> component", () => {
-  let NumberOfEventsWrapper;
+describe("<NumberofEvents /> component", () => {
+  let NumberofEventsWrapper;
   beforeAll(() => {
-    NumberOfEventsWrapper = shallow(<NumberOfEvents updateEvents={() => {}} />);
+    NumberofEventsWrapper = shallow(<NumberofEvents updateEvents={() => {}} />);
   });
 
   test("render textbox element", () => {
-    expect(NumberOfEventsWrapper.find(".numberOfEvents")).toHaveLength(1);
+    expect(NumberofEventsWrapper.find(".numberOfEvents")).toHaveLength(1);
   });
 
-  test("render text input correctly", () => {
-    const numberOfEvents = NumberOfEventsWrapper.state("numberOfEvents");
+  test("check number of events textbox is rendered correctly", () => {
+    expect(NumberofEventsWrapper.find(".numberOfEvents input")).toHaveLength(1);
+  });
+
+  test("check default value of number of events", () => {
     expect(
-      NumberOfEventsWrapper.find("#numberOfEvents__input").prop("value")
-    ).toBe(numberOfEvents);
+      NumberofEventsWrapper.find(".numberOfEvents input").prop("value")
+    ).toBe(32);
   });
 
-  test("change state when input changes", () => {
-    const eventObject = { target: { value: 32 } };
-    NumberOfEventsWrapper.find("#numberOfEvents__input").simulate(
-      "change",
-      eventObject
-    );
-    expect(NumberOfEventsWrapper.state("numberOfEvents")).toBe(32);
-  });
+  test("check changing the value of number of events", () => {
+    NumberofEventsWrapper.find(".numberOfEvents input").simulate("change", {
+      target: { value: 24 },
+    });
 
-  test("change state when input changes", () => {
-    const eventObject = { target: { value: 24 } };
-    NumberOfEventsWrapper.find("#numberOfEvents__input").simulate(
-      "change",
-      eventObject
-    );
-    expect(NumberOfEventsWrapper.state("numberOfEvents")).toBe(24);
+    expect(NumberofEventsWrapper.state("numberOfEvents")).toBe(24);
   });
 
   test("show number of events input label", () => {
-    expect(NumberOfEventsWrapper.find(".numberOfEvents label")).toHaveLength(1);
+    expect(NumberofEventsWrapper.find(".numberOfEvents label")).toHaveLength(1);
   });
 });

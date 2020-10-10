@@ -1,73 +1,5 @@
-import axios from "axios";
 import { mockEvents } from "./mock-events";
-
-async function getSuggestions(query) {
-  if (window.location.href.startsWith("http://localhost")) {
-    return [
-      {
-        city: "Munich",
-        country: "de",
-        localized_country_name: "Germany",
-        name_string: "Munich, Germany",
-        zip: "meetup3",
-        lat: 48.14,
-        lon: 11.58,
-      },
-      {
-        city: "Munich",
-        country: "us",
-        localized_country_name: "USA",
-        state: "ND",
-        name_string: "Munich, North Dakota, USA",
-        zip: "58352",
-        lat: 48.66,
-        lon: -98.85,
-      },
-    ];
-  }
-
-  const token = await getAccessToken();
-
-  if (token) {
-    const url =
-      "https://api.meetup.com/find/locations?&sign=true&photo-host=public&query=" +
-      query +
-      "&access_token=" +
-      token;
-    const result = await axios.get(url);
-    return result.data;
-  }
-
-  return [];
-}
-
-async function getEvents(lat, lon, page) {
-  if (window.location.href.startsWith("http://localhost")) {
-    return mockEvents.events;
-  }
-
-  const token = await getAccessToken();
-
-  if (token) {
-    let url =
-      "https://api.meetup.com/find/upcoming_events?&sign=true&photo-host=public" +
-      "&access_token=" +
-      token;
-    // lat, lon is optional; if you have a lat and lon, you can add them
-    if (lat && lon) {
-      url += "&lat=" + lat + "&lon=" + lon;
-    }
-    if (page) {
-      url += "&page=" + page;
-    }
-    if (lat && lon && page) {
-      url += "&lat=" + lat + "&lon=" + lon + "&page=" + page;
-    }
-    const result = await axios.get(url);
-    const events = result.data.events;
-    return events;
-  }
-}
+import axios from "axios";
 
 function getAccessToken() {
   const accessToken = localStorage.getItem("access_token");
@@ -81,7 +13,6 @@ function getAccessToken() {
         "https://secure.meetup.com/oauth2/authorize?client_id=n1f3ovuo42aps4e1ke23k7etbr&response_type=code&redirect_uri=https://hannahkeating.github.io/meetup/";
       return null;
     }
-
     return getOrRenewAccessToken("get", code);
   }
 
@@ -92,7 +23,6 @@ function getAccessToken() {
   }
 
   const refreshToken = localStorage.getItem("refresh_token");
-
   return getOrRenewAccessToken("renew", refreshToken);
 }
 
@@ -122,4 +52,90 @@ async function getOrRenewAccessToken(type, key) {
   return tokenInfo.data.access_token;
 }
 
-export { getSuggestions, getEvents, getAccessToken };
+async function getSuggestions(query) {
+  if (window.location.href.startsWith("http://localhost")) {
+    return [
+      {
+        city: "Munich",
+        country: "de",
+        localized_country_name: "Germany",
+        name_string: "Munich, Germany",
+        zip: "meetup3",
+        lat: 48.14,
+        lon: 11.58,
+      },
+      {
+        city: "Munich",
+        country: "us",
+        localized_country_name: "USA",
+        state: "ND",
+        name_string: "Munich, North Dakota, USA",
+        zip: "58352",
+        lat: 48.66,
+        lon: -98.85,
+      },
+    ];
+  }
+
+  const token = await getAccessToken();
+  if (token) {
+    const url =
+      "https://api.meetup.com/find/locations?&sign=true&photo-host=public&query=" +
+      query +
+      "&access_token=" +
+      token;
+    const result = await axios.get(url);
+    return result.data;
+  }
+  return [];
+}
+
+async function getEvents(lat, lon, page) {
+  if (window.location.href.startsWith("http://localhost")) {
+    let events2 = [];
+    if (page === null) {
+      events2 = mockEvents.events;
+    } else {
+      for (let i = 0; i < page; i++) {
+        if (i < 2) events2.push(mockEvents.events[i]);
+      }
+    }
+    return events2;
+  }
+
+  if (!navigator.onLine) {
+    const events = localStorage.getItem("lastEvents");
+    return JSON.parse(events);
+  }
+
+  const token = await getAccessToken();
+
+  if (token) {
+    let url =
+      "https://api.meetup.com/find/upcoming_events?&sign=true&photo-host=public" +
+      "&access_token=" +
+      token;
+    // lat, lon is optional; if you have a lat and lon, you can add them
+    if (lat && lon) {
+      url += "&lat=" + lat + "&lon=" + lon;
+    }
+    if (page) {
+      url += "&page=" + page;
+    }
+    if (lat && lon && page) {
+      url += "&lat=" + lat + "&lon=" + lon + "&page=" + page;
+    }
+    const result = await axios.get(url);
+    // return result.data.events;
+
+    const events = result.data.events;
+    if (events.length) {
+      // Check if the events exist
+      localStorage.setItem("lastEvents", JSON.stringify(events));
+    }
+
+    return events;
+  }
+}
+
+export { getSuggestions, getEvents };

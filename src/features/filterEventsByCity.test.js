@@ -1,8 +1,8 @@
 import { loadFeature, defineFeature } from "jest-cucumber";
 import React from "react";
-import { mount, shallow } from "enzyme";
 import App from "../App";
 import { mockEvents } from "../mock-events";
+import { mount, shallow } from "enzyme";
 import CitySearch from "../CitySearch";
 
 const feature = loadFeature("./src/features/filterEventsByCity.feature");
@@ -24,7 +24,7 @@ defineFeature(feature, (test) => {
       "the user should see the list of upcoming events from their location",
       () => {
         AppWrapper.update();
-        expect(AppWrapper.find(".event")).toHaveLength(
+        expect(AppWrapper.find(".Event")).toHaveLength(
           mockEvents.events.length
         );
       }
@@ -38,7 +38,7 @@ defineFeature(feature, (test) => {
   }) => {
     let CitySearchWrapper;
     given("the main page is open", () => {
-      CitySearchWrapper = shallow(<CitySearch />);
+      CitySearchWrapper = shallow(<CitySearch updateEvents={() => {}} />);
     });
 
     when("user starts typing in the city textbox", () => {
@@ -92,7 +92,7 @@ defineFeature(feature, (test) => {
     and(
       "the user should receive a list of upcoming events in that city",
       () => {
-        expect(AppWrapper.find(".event")).toHaveLength(
+        expect(AppWrapper.find(".Event")).toHaveLength(
           mockEvents.events.length
         );
       }
